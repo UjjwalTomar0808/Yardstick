@@ -13,7 +13,6 @@ import {
   TrendingUp, 
   Moon, 
   Sun,
-  Plus,
   Loader2 
 } from 'lucide-react';
 
