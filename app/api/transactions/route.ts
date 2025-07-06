@@ -1,21 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { Types } from 'mongoose';
 import { dbConnect } from '@/lib/mongodb';
 import { Transaction } from '@/lib/models/Transaction';
 import { TransactionInput, ApiResponse, Transaction as TransactionType } from '@/types';
 
+// Define a TypeScript interface for the documents returned by .lean()
+interface TransactionDoc extends Omit<TransactionType, '_id'> {
+  _id: Types.ObjectId;
+}
+
 export async function GET() {
   try {
     await dbConnect();
-    const transactions = await Transaction.find().sort({ date: -1, createdAt: -1 }).lean();
-    
+
+    // Use .lean() to get plain JS objects
+    const transactions = await Transaction.find()
+      .sort({ date: -1, createdAt: -1 })
+      .lean<TransactionDoc[]>();
+
+    // Map over results, converting ObjectId _id to string
     const formattedTransactions = transactions.map(tx => ({
       ...tx,
-      _id: tx._id.toString()
+      _id: tx._id.toString(),
     }));
 
     return NextResponse.json<ApiResponse<TransactionType[]>>({
       success: true,
-      data: formattedTransactions
+      data: formattedTransactions,
     });
   } catch (error) {
     console.error('Error fetching transactions:', error);
@@ -29,16 +40,17 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     await dbConnect();
+
     const body: TransactionInput = await req.json();
-    
-    // Validation
+
+    // Basic validation
     if (!body.amount || body.amount <= 0) {
       return NextResponse.json<ApiResponse<null>>(
         { success: false, error: 'Amount must be greater than 0' },
         { status: 400 }
       );
     }
-    
+
     if (!body.date || !body.description?.trim() || !body.category) {
       return NextResponse.json<ApiResponse<null>>(
         { success: false, error: 'All fields are required' },
@@ -51,7 +63,7 @@ export async function POST(req: NextRequest) {
       date: body.date,
       description: body.description.trim(),
       category: body.category,
-      type: body.type || 'expense'
+      type: body.type || 'expense',
     });
 
     await transaction.save();
@@ -60,8 +72,8 @@ export async function POST(req: NextRequest) {
       success: true,
       data: {
         ...transaction.toObject(),
-        _id: transaction._id.toString()
-      }
+        _id: transaction._id.toString(),
+      },
     });
   } catch (error) {
     console.error('Error creating transaction:', error);
