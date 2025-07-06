@@ -1,22 +1,36 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { Types } from 'mongoose';
 import { dbConnect } from '@/lib/mongodb';
 import { Budget } from '@/lib/models/Budget';
 import { Transaction } from '@/lib/models/Transaction';
-import { BudgetInput, ApiResponse, Budget as BudgetType } from '@/types';
+import { BudgetInput, ApiResponse, BudgetType } from '@/types';
+
+interface BudgetDoc {
+  _id: Types.ObjectId;
+  category: string;
+  amount: number;
+  month: string;
+  spent: number;
+}
 
 export async function GET() {
   try {
     await dbConnect();
-    const budgets = await Budget.find().sort({ month: -1, category: 1 }).lean();
-    
-    const formattedBudgets = budgets.map(budget => ({
+
+    // Get budgets from DB with proper typing
+    const budgets = await Budget.find()
+      .sort({ month: -1, category: 1 })
+      .lean<BudgetDoc[]>();
+
+    // Convert _id from ObjectId to string
+    const formattedBudgets: BudgetType[] = budgets.map((budget) => ({
       ...budget,
-      _id: budget._id.toString()
+      _id: budget._id.toString(),
     }));
 
     return NextResponse.json<ApiResponse<BudgetType[]>>({
       success: true,
-      data: formattedBudgets
+      data: formattedBudgets,
     });
   } catch (error) {
     console.error('Error fetching budgets:', error);
@@ -31,7 +45,7 @@ export async function POST(req: NextRequest) {
   try {
     await dbConnect();
     const body: BudgetInput = await req.json();
-    
+
     // Validation
     if (!body.amount || body.amount <= 0) {
       return NextResponse.json<ApiResponse<null>>(
@@ -39,7 +53,7 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-    
+
     if (!body.category || !body.month) {
       return NextResponse.json<ApiResponse<null>>(
         { success: false, error: 'Category and month are required' },
@@ -50,7 +64,7 @@ export async function POST(req: NextRequest) {
     // Check if budget already exists
     const existingBudget = await Budget.findOne({
       category: body.category,
-      month: body.month
+      month: body.month,
     });
 
     if (existingBudget) {
@@ -60,14 +74,16 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Calculate current spending for this category and month
-    const startDate = `${body.month}-01`;
-    const endDate = `${body.month}-31`;
-    
+    // Calculate spending for the category and month using proper date range
+    const startDate = new Date(`${body.month}-01`);
+    // Next month, but exclusive upper bound
+    const endDate = new Date(startDate);
+    endDate.setMonth(endDate.getMonth() + 1);
+
     const expenses = await Transaction.find({
       category: body.category,
       type: 'expense',
-      date: { $gte: startDate, $lte: endDate }
+      date: { $gte: startDate, $lt: endDate },
     });
 
     const spent = expenses.reduce((sum, expense) => sum + expense.amount, 0);
@@ -76,7 +92,7 @@ export async function POST(req: NextRequest) {
       category: body.category,
       amount: Number(body.amount),
       month: body.month,
-      spent
+      spent,
     });
 
     await budget.save();
@@ -85,8 +101,8 @@ export async function POST(req: NextRequest) {
       success: true,
       data: {
         ...budget.toObject(),
-        _id: budget._id.toString()
-      }
+        _id: budget._id.toString(),
+      },
     });
   } catch (error) {
     console.error('Error creating budget:', error);

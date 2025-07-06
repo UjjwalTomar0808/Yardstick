@@ -7,6 +7,14 @@ export interface Transaction {
   type: 'expense' | 'income';
 }
 
+export interface BudgetType {
+  _id: string;
+  category: string;
+  amount: number;
+  month: string;
+  spent: number;
+}
+
 export interface TransactionInput {
   amount: number;
   date: string;
