@@ -1,7 +1,6 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Lightbulb, TrendingUp, AlertTriangle, CheckCircle, Target } from 'lucide-react';
 import { SpendingInsight, DashboardStats, BudgetComparison } from '@/types';
 

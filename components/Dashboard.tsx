@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { DollarSign, TrendingUp, TrendingDown, Target, ArrowUpIcon, ArrowDownIcon } from 'lucide-react';
+import { TrendingUp, TrendingDown, Target, ArrowUpIcon, ArrowDownIcon } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { DashboardStats } from '@/types';
 import { format } from 'date-fns';

@@ -1,18 +1,4 @@
 import { Category } from '@/types';
-import { 
-  ShoppingCart, 
-  Car, 
-  Utensils, 
-  Gamepad2, 
-  Heart, 
-  Home, 
-  GraduationCap, 
-  Coffee,
-  Plane,
-  Gift,
-  Shirt,
-  DollarSign
-} from 'lucide-react';
 
 export const CATEGORIES: Category[] = [
   { name: 'Food & Dining', color: '#e74c3c', icon: 'Utensils' },
