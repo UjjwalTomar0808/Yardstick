@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Personal Finance Tracker
+
+A simple web app to help you track your money and stay on budget.
+
+## What it does
+
+- **Track Expenses**: Add your daily spending with categories like food, shopping, or transportation
+- **Set Budgets**: Create monthly budgets for different spending categories
+- **Visual Charts**: See your spending patterns with easy-to-understand charts and graphs
+- **Smart Insights**: Get tips and suggestions to improve your financial health
+
+## Features
+
+- Add, edit, and delete transactions
+- Set monthly budgets for different categories
+- View spending trends with charts
+- Dark/light theme toggle
+- Mobile-friendly design
+- Quick tips and insights
+
+## How to use
+
+1. **Add a Transaction**: Enter the amount, date, description, and category
+2. **Set a Budget**: Choose a category and set your monthly spending limit
+3. **View Charts**: See your spending patterns and budget progress
+4. **Track Progress**: Monitor how much you've spent vs. your budget
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Set up your environment variables
+4. Run the development server: `npm run dev`
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Tech Stack
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Next.js 15
+- TypeScript
+- Tailwind CSS
+- MongoDB
+- Framer Motion for animations
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deployment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The app is ready to deploy on Vercel.
 
-## Learn More
+## Future Plans
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **User Authentication**: Secure login and user accounts
+- **Rate Limiting**: Protect against abuse and ensure fair usage
+- **Banking Integrations**: Connect with real bank accounts for automatic transaction imports
+- **Mobile App**: Native iOS and Android applications
+- **Advanced Analytics**: More detailed spending insights and predictions
+- **Export Features**: Download reports in PDF or CSV format 
